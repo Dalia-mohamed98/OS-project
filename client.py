@@ -19,10 +19,9 @@ socket.connect ("tcp://localhost:%s" % port)
 if len(sys.argv) > 2:
     socket.connect ("tcp://localhost:%s" % port1)
 
-#  Do 10 requests, waiting each time for a response
-#for request in range (1,10):
-    
-print ("Waiting request...")
+#  Do request, waiting for a response
+
+print ("Waiting request... Choose 1-update 2-show 3-download")
 
 read = input()
 while(read.find("Upload") == -1):
@@ -33,7 +32,27 @@ socket.send_string(read)
 print ("Sending request...")
 #time.sleep (1) 
 
-#  Get the reply.
+#  Get the port.
 message = socket.recv_string()
 
-print ("Received reply ", message)
+print ("Received port ", message)
+
+##################################################################
+#connect to process with given port and upload file
+
+socket1 = context.socket(zmq.REQ)
+socket1.connect ("tcp://localhost:%s" % message)
+
+print ("connecting to process...Enter your file") 
+file=input()
+
+f = open(file,'rb')
+print ('Sending...')
+l = f.read()
+socket1.send(l)
+
+f.close()
+print ("Done Sending")
+
+print (socket1.recv())
+socket1.close()

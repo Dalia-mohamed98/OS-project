@@ -7,6 +7,10 @@ Created on Mon Apr 15 13:29:00 2019
 import zmq
 import time
 import sys
+import random
+
+
+#LookUpTable
 
 file ={}
 file["name"]="c://name.txt"
@@ -63,7 +67,8 @@ while True:
                 n.append(i)
         #print(n)
         
-        ports=[]
+        #respond with a list of ports
+        '''ports=[]
         for i in range(len(n)):
             for j in range(len(Nports)): #3
                 if Nports[n[i]][j][1] == 'Y':
@@ -73,15 +78,21 @@ while True:
         for i in ports:
             res += i
             res += " "
-        
-        
-            #print(res)
-    #time.sleep (1) 
-        socket.send_string("Select port %s" % res)
-        
-        print ("Sent Reply... ")
+        '''
+        #pick machine random and choose first port alive
+        res = ""
+        j=0
+        k=random.choice(n)
+        while (res=="" and j in range(len(Nports[k]))):
+            if Nports[k][j][1] == 'Y':
+                res = Nports[k][j][0]
+            
+            j+=1
+            
+        socket.send_string(res)
+        print ("Sending Reply... ")
    
-socket.close()
+
 
 
 
